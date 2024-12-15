@@ -54,20 +54,25 @@ function App() {
   const calculateResults = () => {
     const predefinedWords = predefinedText.split(' ');
     const typedWords = text.trim().split(' ');
-    const totalWords = predefinedWords.length;
 
     let correctWords = 0;
     let mistakes = 0;
 
-    // Compare word by word
-    typedWords.forEach((word, index) => {
-      if (word === predefinedWords[index]) {
+    // Compare both arrays
+    predefinedWords.forEach((word, index) => {
+      if (typedWords[index] === word) {
         correctWords++;
       } else {
         mistakes++;
       }
     });
 
+    // Count extra words typed by the user
+    if (typedWords.length > predefinedWords.length) {
+      mistakes += typedWords.length - predefinedWords.length;
+    }
+
+    const totalWords = predefinedWords.length;
     const wpm = Math.round((correctWords / (selectedTimer / 60)) || 0); // Adjust based on timer
     const accuracy = Math.round((correctWords / totalWords) * 100) || 0;
 
@@ -104,7 +109,7 @@ function App() {
           <option value={60}>1 Minute</option>
         </select>
       </div>
-      
+
       {/* Display Timer and Ideal WPM at the top */}
       {isRunning && (
         <div className="top-info">
